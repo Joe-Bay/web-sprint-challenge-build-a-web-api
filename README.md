@@ -62,7 +62,7 @@ Be prepared to demonstrate your understanding of this week's concepts by answeri
 
 1. The core features of Node.js and Express and why they are useful.
 
- Asynchronous programming is one, while most others are synchronous we take advantage. Which allows multiple things to be executed at once.
+ Asynchronous programming is one, while most others are synchronous we take advantage. Which allows multiple things to be executed at once. It also allows for you to use middleware to respond to HTTP requests
 
 1. Understand and explain the use of Middleware?
 
