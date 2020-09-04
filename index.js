@@ -13,7 +13,7 @@ I need this code, but don't know where, perhaps should make some middleware, don
 Go code!
 */
 const server = require('./server')
-port = 8000
+port = process.env.PORT || 8000
 server.listen(port, () => {
     console.log(`**** Server listening on port ${port} ****`)
 })
