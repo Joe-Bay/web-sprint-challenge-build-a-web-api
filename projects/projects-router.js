@@ -1,5 +1,6 @@
 const express = require('express')
 const ProjectsDB = require('../data/helpers/projectModel')
+const ActionsDB = require('../data/helpers/actionModel')
 const router = express.Router()
 
 router.get('/', (req, res) => {
@@ -23,9 +24,26 @@ router.get('/:id', (req, res) => {
     .catch(() => {
         res.status(500).json({message: "There was a problem finding that project"})
     })        
+})
 
+router.get('/:id/actions', (req, res) => { // this will list all the actions on a particular project
+    ProjectsDB.get(req.params.id)
+    .then(project => {
+        if(project === null){
+            res.status(404).json({message: "Could not find the project with that id"})
+        } else {
+    ProjectsDB.getProjectActions(req.params.id)
+    .then(listActions => {
+        res.status(200).json(listActions)
+    }) 
+    .catch(() => {
+        res.status(500).json({message: "There was an error retrieving the actions for this project"})
+    })           
+        }
+    })
 
 })
+
 
 
 router.post('/', (req, res) => {
@@ -43,6 +61,25 @@ router.post('/', (req, res) => {
     }
 
 
+})
+router.post('/:id/actions', (req, res) => {
+    const postData = { ...req.body, project_id: req.params.id }
+    console.log(postData)
+    ActionsDB.insert(postData)
+    .then(newAction => {
+        if(newAction.project_id === null){
+            res.status(404).json({message: 'Could not find the project with that id'})
+        } else if(newAction.description.length > 128){
+            res.status(400).json({message: 'Only 128 characters allowed in description'})
+        } else if(!newAction.description || !newAction.notes){
+            res.status(400).json({message: "Please enter the notes and description fields"})
+        } else {
+            res.status(201).json(newAction)
+        }
+    })
+    .catch(() => {
+        res.status(500).json({message: 'There was an error posting this action perhaps there is no project for that id'})
+    })
 })
 
 router.put('/:id', (req, res) => {
