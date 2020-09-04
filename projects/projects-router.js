@@ -29,13 +29,20 @@ router.get('/:id', (req, res) => {
 
 
 router.post('/', (req, res) => {
+
+    if(req.body.name && req.body.description){
     ProjectsDB.insert(req.body)
     .then(newProject => {
         res.status(201).json(newProject)
     })
     .catch(() => {
         res.status(400).json({message: "Error: make sure to fill both name, and description fields"})
-    })
+    })        
+    } else {
+        res.status(400).json({message: "make sure to fill both name and description fields"})
+    }
+
+
 })
 
 router.put('/:id', (req, res) => {
