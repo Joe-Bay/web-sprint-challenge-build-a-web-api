@@ -67,9 +67,8 @@ router.post('/:id/actions', (req, res) => {
     console.log(postData)
     ActionsDB.insert(postData)
     .then(newAction => {
-        if(newAction.project_id === null){
-            res.status(404).json({message: 'Could not find the project with that id'})
-        } else if(newAction.description.length > 128){
+      
+         if(newAction.description.length > 128){
             res.status(400).json({message: 'Only 128 characters allowed in description'})
         } else if(!newAction.description || !newAction.notes){
             res.status(400).json({message: "Please enter the notes and description fields"})
@@ -78,7 +77,7 @@ router.post('/:id/actions', (req, res) => {
         }
     })
     .catch(() => {
-        res.status(500).json({message: 'There was an error posting this action perhaps there is no project for that id'})
+        res.status(404).json({message: 'Could not find project with that id'})
     })
 })
 
